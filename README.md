@@ -21,3 +21,9 @@ To submit the your challenge please follow the steps below:
 - Send us back a zip archive of the project folder with your changes along with your document
 
 Please contact your Geotab recruiter if you have any questions, and good luck!
+
+SN | Description | Issue Type | Status
+---| ----------- | ---------- | ------
+1  | medium | BUG | TODO
+2  | mild | IMPROVEMENT | TODO
+3  | Hot | ISSUE | TODO
