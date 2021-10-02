@@ -1,0 +1,23 @@
+{
+    "version": "2.0.0",
+    "args": [],
+    "echoCommand": true,
+    "tasks": [
+        {
+            "label": "build",
+            "command": "dotnet",
+            "args": [
+                "build",
+                "-c", "Debug",
+                "-v", "m",
+                "-m",
+                "${workspaceRoot}/ConsoleApp1/JokeGenerator.csproj"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": "$msCompile"
+        }
+    ]
+}
