@@ -1,128 +1,47 @@
 ﻿using System;
-
 using Geotab.Core;
 
-namespace ConsoleApp1
+namespace JokeGenerator
 {
     class Program
     {
-        static string[] results = new string[50];
-        static char key;
-        static Tuple<string, string> names;
-        static ConsolePrinter printer = new ConsolePrinter();
-
         static void Main(string[] args)
         {
-            // Application Started 
+            // Application Start 
             Logger.LogInfo($"APP START: JokeGenerator started at {DateTime.UtcNow}");
 
-            printer.Value("Press ? to get instructions.").ToString();
-            if (Console.ReadLine() == "?")
+            bool continueApplication;
+            try
             {
-                while (true)
+                do
                 {
-                    printer.Value("Press c to get categories").ToString();
-                    printer.Value("Press r to get random jokes").ToString();
-                    GetEnteredKey(Console.ReadKey());
-                    if (key == 'c')
+                    continueApplication = true;
+                    DisplayControl.ShowInstructions();
+                    var userChoice = ConsoleReader.ReadKey();
+                    if (UserOptionHelper.IsContinueApplication(userChoice))
                     {
-                        getCategories();
-                        PrintResults();
+                        Application.Start();
                     }
-                    if (key == 'r')
+                    else if (UserOptionHelper.IsExitApplication(userChoice))
                     {
-                        printer.Value("Want to use a random name? y/n").ToString();
-                        GetEnteredKey(Console.ReadKey());
-                        if (key == 'y')
-                            GetNames();
-                        printer.Value("Want to specify a category? y/n").ToString();
-                        if (key == 'y')
-                        {
-                            printer.Value("How many jokes do you want? (1-9)").ToString();
-                            int n = Int32.Parse(Console.ReadLine());
-                            printer.Value("Enter a category;").ToString();
-                            GetRandomJokes(Console.ReadLine(), n);
-                            PrintResults();
-                        }
-                        else
-                        {
-                            printer.Value("How many jokes do you want? (1-9)").ToString();
-                            int n = Int32.Parse(Console.ReadLine());
-                            GetRandomJokes(null, n);
-                            PrintResults();
-                        }
+                        continueApplication = false;
+                        DisplayControl.ShowApplicationExitMessage();
                     }
-                    names = null;
-                }
+                    else
+                    {
+                        DisplayControl.ShowInvalidMessage(userChoice.Key);
+                    }
+
+                } while (continueApplication);
             }
-
-        }
-
-        private static void PrintResults()
-        {
-            printer.Value("[" + string.Join(",", results) + "]").ToString();
-        }
-
-        private static void GetEnteredKey(ConsoleKeyInfo consoleKeyInfo)
-        {
-            switch (consoleKeyInfo.Key)
+            catch (Exception exception)
             {
-                case ConsoleKey.C:
-                    key = 'c';
-                    break;
-                case ConsoleKey.D0:
-                    key = '0';
-                    break;
-                case ConsoleKey.D1:
-                    key = '1';
-                    break;
-                case ConsoleKey.D3:
-                    key = '3';
-                    break;
-                case ConsoleKey.D4:
-                    key = '4';
-                    break;
-                case ConsoleKey.D5:
-                    key = '5';
-                    break;
-                case ConsoleKey.D6:
-                    key = '6';
-                    break;
-                case ConsoleKey.D7:
-                    key = '7';
-                    break;
-                case ConsoleKey.D8:
-                    key = '8';
-                    break;
-                case ConsoleKey.D9:
-                    key = '9';
-                    break;
-                case ConsoleKey.R:
-                    key = 'r';
-                    break;
-                case ConsoleKey.Y:
-                    key = 'y';
-                    break;
+
+                Logger.LogError("Application Error", exception);
             }
-        }
 
-        private static void GetRandomJokes(string category, int number)
-        {
-            new JsonFeed("https://us-central1-geotab-interviews.cloudfunctions.net/joke", number);
-            results = JsonFeed.GetRandomJokes(names?.Item1, names?.Item2, category);
-        }
-
-        private static void getCategories()
-        {
-            new JsonFeed("https://us-central1-geotab-interviews.cloudfunctions.net/joke_category", 0);
-            results = JsonFeed.GetCategories();
-        }
-
-        private static void GetNames()
-        {
-            new JsonFeed("https://www.names.privserv.com/api/", 0);
-            dynamic result = JsonFeed.Getnames();
-            names = Tuple.Create(result.name.ToString(), result.surname.ToString());
+            // Application End 
+            Logger.LogInfo($"APP STOP: JokeGenerator stopped at {DateTime.UtcNow}");
         }
     }
 }

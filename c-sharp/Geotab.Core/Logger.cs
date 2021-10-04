@@ -2,7 +2,6 @@
 using System.IO;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-
 using log4net;
 using log4net.Config;
 
@@ -17,46 +16,34 @@ namespace Geotab.Core
         {
             var logRepository = LogManager.GetRepository(Assembly.GetEntryAssembly());
             XmlConfigurator.Configure(logRepository, new FileInfo("log4net.config"));
-        }
-        public static void LogError(string message, Exception exception = null)
-        {
-            if (exception == null)
-            {
-                log.Error(message);
-            }
-            else
-            {
-                log.Error(message, exception);
-            }
+            //log4net.Config.XmlConfigurator.Configure();
         }
 
-        public static void LogWarning(string message, Exception exception = null)
+        public static void LogError(string message, Exception exception = null, [CallerFilePath] string fileName = "", [CallerMemberName] string methodName = "", [CallerLineNumber] int lineNumber = 0)
         {
-            if (exception == null)
-            {
-                log.Warn(message);
-            }
-            else
-            {
-                log.Warn(message, exception);
-            }
+            log.Error(FormatMessage(message, methodName, fileName, lineNumber), exception);
         }
 
-        public static void LogInfo(string message, Exception exception = null)
+        public static void LogWarning(string message, Exception exception = null, [CallerFilePath] string fileName = "", [CallerMemberName] string methodName = "", [CallerLineNumber] int lineNumber = 0)
         {
-            if (exception == null)
-            {
-                log.Info(message);
-            }
-            else
-            {
-                log.Info(message, exception);
-            }
+            log.Warn(FormatMessage(message, methodName, fileName, lineNumber), exception);
         }
 
-        public static void Debug(string message, [CallerMemberName] string methodName = "", [CallerLineNumber] int lineNumber = 0)
+        public static void LogInfo(string message, Exception exception = null, [CallerFilePath] string fileName = "", [CallerMemberName] string methodName = "", [CallerLineNumber] int lineNumber = 0)
         {
-            log.Debug(message + " Method: " + methodName + " Line: " + lineNumber.ToString());
+            log.Info(FormatMessage(message, methodName, fileName, lineNumber), exception);
         }
+
+        public static void Debug(string message, [CallerFilePath] string fileName = "", [CallerMemberName] string methodName = "", [CallerLineNumber] int lineNumber = 0)
+        {
+            log.Debug(FormatMessage(message, methodName, fileName, lineNumber));
+
+        }
+
+        private static string FormatMessage(string message, string methodName, string fileName, int lineNumber)
+        {
+            return $"{message} [Method: {methodName}(), Line: {lineNumber}, File: {Path.GetFileName(fileName)}]";
+        }
+
     }
 }
