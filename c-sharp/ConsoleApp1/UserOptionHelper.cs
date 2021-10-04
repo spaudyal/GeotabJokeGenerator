@@ -30,6 +30,11 @@ namespace JokeGenerator
             return keyInfo.Key == ConsoleKey.Y || keyInfo.KeyChar == 'y';
         }
 
+        public static bool IsDisagreed(ConsoleKeyInfo keyInfo)
+        {
+            return keyInfo.Key == ConsoleKey.N || keyInfo.KeyChar == 'n';
+        }
+
         public static bool IsValidDigit(ConsoleKeyInfo keyInfo)
         {
             return char.IsNumber(keyInfo.KeyChar);

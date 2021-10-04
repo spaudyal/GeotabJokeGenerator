@@ -29,7 +29,7 @@ namespace JokeGenerator
                     }
                     else
                     {
-                        DisplayControl.ShowInvalidMessage(userChoice.Key);
+                        DisplayControl.ShowInvalidMessage(userChoice);
                     }
 
                 } while (continueApplication);

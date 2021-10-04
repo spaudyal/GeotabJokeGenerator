@@ -25,15 +25,10 @@ namespace JokeGenerator
             return userString;
         }
 
-        public static int ReadDigit()
+        public static bool TryReadDigit(out int result)
         {
             var userString = Console.ReadLine();
-            if (int.TryParse(userString, out int result))
-            {
-                return result;
-            }
-            Logger.LogWarning($"User provided invalid input [{userString}] for jokes count. Use default value {GeoConstants.JOKE_COUNT_DEFAULT}");
-            return GeoConstants.JOKE_COUNT_DEFAULT;
+            return int.TryParse(userString, out result);
         }
     }
 }

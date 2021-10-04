@@ -10,15 +10,16 @@ SN | Description | Issue | Status
 ---| ----------- | ------| ------
 1  | The multiple jokes are not shown when the user provides the count (No use of the number of times "n" variables) | BUG | TODO
 2  | The user should be able to provide the joke count between 1-9 (No check for any invalid and out of range inputs) | BUG | DONE
-3  | If user provides invalid instruction (hit enter), then the category api is called, instead "Invalid Input" message should be given, and return to main menu | ISSUE | TODO
+3  | From main menu, when user provides invalid input, "Invalid Input" message should be shown, and return to main menu | ISSUE | DONE
 4  | On random jokes option, when user chooses not to use random name, the category input is not taken | BUG | DONE
 5  | When asked for a category, the input should be taken, before asking the count for number of jokes | ISSUE | DONE
 6  | No dev logging is available for correct app debugging | IMPROVE | DONE 
 7  | There is a in-consistency in the way user inputs are asked (sometime you need to press return sometimes not) | ISSUE | DONE
 8  | The categories result can possibly cached instead of requesting the API each time | IMPROVE | TODO
-9  | We can provide (when we type "c" its a pause due to api call, we can make is responsive by providing some update to user) | IMPROVE | TODO
+9  | Show the on-progress message to user during the API call  | IMPROVE | TODO
 10 | Add instruction to terminate the application (Provide new option 'x' to exit in main menu) | IMPROVE | DONE
 11 | Refactoring of the code (Currently, everything is defined within the driver class ) | ISSUE | DONE-WIP
+12 | If a user provides invalid input, they should be prompted to correct their input. Or, use default value | BUG | DONE
 
 ## Design Improvements
 
