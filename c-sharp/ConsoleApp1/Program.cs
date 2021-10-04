@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
+
+using Geotab.Core;
 
 namespace ConsoleApp1
 {
@@ -17,6 +13,9 @@ namespace ConsoleApp1
 
         static void Main(string[] args)
         {
+            // Application Started 
+            Logger.LogInfo($"APP START: JokeGenerator started at {DateTime.UtcNow}");
+
             printer.Value("Press ? to get instructions.").ToString();
             if (Console.ReadLine() == "?")
             {
