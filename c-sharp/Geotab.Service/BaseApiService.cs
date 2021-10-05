@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Geotab.Service
+﻿namespace Geotab.Service
 {
+    // TODO Work in progress
     class BaseApiService
     {
+        public string BaseUrl { get; set; }
+
+        public int? TimeoutInSeconds { get; set; }
         public BaseApiService() { }
 
-        public string BaseUrl { get; set; }
     }
 }

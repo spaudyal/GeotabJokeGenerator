@@ -1,5 +1,4 @@
 ﻿using System;
-using Geotab.Core;
 
 namespace JokeGenerator
 {

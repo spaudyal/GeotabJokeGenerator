@@ -18,7 +18,7 @@ namespace Geotab.Service
         {
             new JsonFeed("https://us-central1-geotab-interviews.cloudfunctions.net/joke", number);
             var results = JsonConvert.DeserializeObject<JokeModel>(JsonFeed.GetRandomJokes(subject, category).Result);
-            return new List<JokeModel>() { results };
+            return new() { results };
         }
 
         public static JokeSubject GetNames()

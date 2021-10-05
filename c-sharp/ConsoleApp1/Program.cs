@@ -36,7 +36,8 @@ namespace JokeGenerator
             }
             catch (Exception exception)
             {
-                Logger.LogError("Application Error", exception);
+                // If exception not handled at this level, then just log it and terminate the program
+                Logger.LogError("Application Exit with Error", exception);
             }
 
             // Application End 

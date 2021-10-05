@@ -1,11 +1,16 @@
-﻿using Geotab.Core;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Geotab.Core;
 using Geotab.Model;
 using Geotab.Service;
 
 namespace JokeGenerator
 {
-    public class Application
+    public class Application : IDisposable
     {
+        // TODO: We might need a background loader, or cleanup thes cache in certain interval to keep our cache updated
+        private static HashSet<string> m_cachedCategory;
         public static void Start()
         {
             bool isExitToMainMenu;
@@ -17,7 +22,8 @@ namespace JokeGenerator
                 switch (userMenuChoice.Key)
                 {
                     case GeoMenuOption.CATEGORY:
-                        DisplayControl.PrintCategories(ApiHelper.GetCategories());
+                        List<string> categories = ReadOrGetCategories();
+                        DisplayControl.PrintCategories(categories);
                         break;
                     case GeoMenuOption.RANDOM_JOKE:
                         JokeSubject jokeSubject = GetJokeSubject();
@@ -37,6 +43,20 @@ namespace JokeGenerator
             } while (!isExitToMainMenu);
         }
 
+        private static List<string> ReadOrGetCategories()
+        {
+            if (m_cachedCategory != null && m_cachedCategory.Count > 0)
+            {
+                return m_cachedCategory.ToList();
+            }
+            else
+            {
+                var categories = ApiHelper.GetCategories();
+                m_cachedCategory = new(categories);
+                return categories;
+            }
+        }
+
         private static int GetJokeCount()
         {
             ConsolePrinter.PrintLine("How many jokes do you want? (1-9).");
@@ -54,16 +74,27 @@ namespace JokeGenerator
 
         private static JokeCategory GetJokeCategory()
         {
-            JokeCategory jokeCategory = null;
             ConsolePrinter.PrintLine("Want to specify a category? y/n");
             var userOption = ConsoleReader.ReadKey();
             if (UserOptionHelper.IsAgreed(userOption))
             {
-                ConsolePrinter.PrintLine("Enter a category.");
-                jokeCategory = new JokeCategory()
+                while (true)
                 {
-                    Name = ConsoleReader.ReadLine()
-                };
+                    ConsolePrinter.PrintLine("Enter a category.");
+                    var categoryName = ConsoleReader.ReadLine();
+                    if (VerifyIfCategoryValid(categoryName))
+                    {
+                        return new()
+                        {
+                            Name = categoryName
+                        };
+                    }
+                    else
+                    {
+                        ConsolePrinter.Print("Invalid Category. Categories can be: ");
+                        DisplayControl.PrintCategories(ApiHelper.GetCategories());
+                    }
+                }
             }
             else
             {
@@ -73,12 +104,19 @@ namespace JokeGenerator
                 }
                 ConsolePrinter.PrintLine($"No category selected.");
             }
-            return jokeCategory;
+            return null;
+        }
+
+        private static bool VerifyIfCategoryValid(string categoryName)
+        {
+            // Validate the Category (the API call will throw internal server error if invalid category is passed)
+            List<string> validCategories = ReadOrGetCategories();
+            return validCategories.Contains(categoryName, StringComparer.OrdinalIgnoreCase);
         }
 
         private static JokeSubject GetJokeSubject()
         {
-            JokeSubject subject = new JokeSubject();
+            JokeSubject subject = new();
             ConsolePrinter.PrintLine("Want to use a random name? y/n");
             var userOption = ConsoleReader.ReadKey();
             if (UserOptionHelper.IsAgreed(userOption))
@@ -94,6 +132,11 @@ namespace JokeGenerator
                 ConsolePrinter.PrintLine($"Using default Subject Name [{subject}].");
             }
             return subject;
+        }
+
+        public void Dispose()
+        {
+            m_cachedCategory.Clear();
         }
     }
 }

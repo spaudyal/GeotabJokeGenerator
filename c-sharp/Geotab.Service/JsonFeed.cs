@@ -1,13 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Geotab.Core;
 using Geotab.Model;
-using Newtonsoft.Json;
 
 namespace Geotab.Service
 {
+    // TODO Improve the HttpClient request class
     class JsonFeed
     {
         static string _url = "";
@@ -20,18 +19,28 @@ namespace Geotab.Service
 
         public static async Task<string> GetRandomJokes(JokeSubject subject, JokeCategory category)
         {
-            HttpClient client = new HttpClient();
-            client.BaseAddress = new Uri(_url);
-            string url = string.Empty;
-            if (category != null)
+            try
             {
-                url += "?";
-                url += "category=";
-                url += category.Name;
+                HttpClient client = new();
+                client.BaseAddress = new(_url);
+                string url = string.Empty;
+                if (category != null)
+                {
+                    url += "?";
+                    url += "category=";
+                    url += category.Name;
+                }
+                // TODO
+                Logger.Debug($"Making API Call to {url}");
+                var response = await client.GetAsync(url);
+                response.EnsureSuccessStatusCode();
+                return await response.Content.ReadAsStringAsync();
             }
-            // TODO
-            Logger.Debug($"Making API Call to {url}");
-            return await Task.FromResult(client.GetStringAsync(url).Result);
+            catch (HttpRequestException httpException)
+            {
+                Logger.LogError("The http response failed due to network/server issue.", httpException);
+                throw;
+            }
         }
 
         /// <summary>
@@ -41,18 +50,37 @@ namespace Geotab.Service
         /// <returns></returns>
 		public static async Task<string> Getnames()
         {
-            HttpClient client = new HttpClient();
-            client.BaseAddress = new Uri(_url);
-            Logger.Debug($"Making API Call to {_url}");
-            return await Task.FromResult(client.GetStringAsync("").Result);
-            
+            try
+            {
+                HttpClient client = new();
+                client.BaseAddress = new(_url);
+                Logger.Debug($"Making API Call to {_url}");
+                var response = await client.GetAsync("");
+                response.EnsureSuccessStatusCode();
+                return await response.Content.ReadAsStringAsync();
+            }
+            catch (HttpRequestException httpException)
+            {
+                Logger.LogError("The http response failed due to network/server issue.", httpException);
+                throw;
+            }
         }
 
         public static async Task<string> GetCategories()
         {
-            HttpClient client = new HttpClient();
-            Logger.Debug($"Making API Call to {_url}");
-            return await Task.FromResult(client.GetStringAsync(new Uri(_url)).Result);
+            try
+            {
+                HttpClient client = new();
+                Logger.Debug($"Making API Call to {_url}");
+                var response = await client.GetAsync(new Uri(_url));
+                response.EnsureSuccessStatusCode();
+                return await response.Content.ReadAsStringAsync();
+            }
+            catch (HttpRequestException httpException)
+            {
+                Logger.LogError("The http response failed due to network/server issue.", httpException);
+                throw;
+            }
         }
 
         //public static string ConstructUri()

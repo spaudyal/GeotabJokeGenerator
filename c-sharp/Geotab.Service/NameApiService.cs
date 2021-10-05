@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Geotab.Service
+﻿namespace Geotab.Service
 {
+    // TODO Work in progress
     class NameApiService : BaseApiService
     {
-
+        public NameApiService(string url)
+        {
+            this.BaseUrl = url;
+        }
     }
 }

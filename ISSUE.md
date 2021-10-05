@@ -16,14 +16,16 @@ SN | Description | Issue | Status
 5  | When asked for a category, the input should be taken, before asking the count for number of jokes | ISSUE | DONE
 6  | No dev logging is available for correct app debugging | IMPROVE | DONE 
 7  | There is a in-consistency in the way user inputs are asked (sometime you need to press return sometimes not) | ISSUE | DONE
-8  | The categories result can possibly cached instead of requesting the API each time | IMPROVE | TODO
+8  | The categories result can possibly cached instead of requesting the API each time | IMPROVE | DONE
 9  | Show the on-progress message to user during the API call  | IMPROVE | TODO
 10 | Add instruction to terminate the application (Provide new option 'x' to exit in main menu) | IMPROVE | DONE
-11 | Refactoring of the code (Currently, everything is defined within the driver class ) | ISSUE | WIP
+11 | Refactoring of the code (Currently, everything is defined within the driver class ) | ISSUE | DONE
 12 | If a user provides invalid input, they should be prompted to correct their input. Or, use default value | BUG | DONE
-13 | When user provide the invalid category, no proper message is displayed and program terminates illegally | BUG | TODO
-14 | Handle the http response codes, and log the errors (500, 404) properly | BUG | TODO
+13 | When user provide the invalid category, no proper message is displayed and program terminates illegally | BUG | DONE
+14 | Handle errors during http request/async calls, and throw them gracefully | BUG | DONE
 15 | Fix the use of dynamic with the proper domain objects | IMPROVE | DONE
+16 | The category can be pre-fetched and stored, and before making request we can verify validity | IMPROVE | DONE
+17 | Refactor the HttpClient class with proper arguments | IMPROVE | TODO
 
 ## Design Improvements
 
@@ -42,3 +44,5 @@ The improvements made, with my considerations
 -- Core Layer (all global level functionality resides in Core project)
 -- Model Layer (all the DTO and types for the solution resides)
 
+- Proper handling of error from the HttpResponse object
+- 
