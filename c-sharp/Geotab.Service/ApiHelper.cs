@@ -30,8 +30,22 @@ namespace Geotab.Service
                 TimeoutInSeconds = GeotabApiConstants.TIMEOUT_SECONDS
             };
             string queryParameters = ConstructQueryParameters(category, jokeCount);
-            var results = JsonConvert.DeserializeObject<JokeModel>(jokeHttpService.GetRandomJokes(queryParameters).Result);
-            return new() { results };
+            JokeModel jokeModel = null;
+            if (jokeCount > 1)
+            {
+                List<JokeModel> jokeList = new();
+                var result = jokeHttpService.GetRandomMultipleJokes(queryParameters, jokeCount).Result;
+                result.ForEach(jokeString =>
+                {
+                    jokeList.Add(JsonConvert.DeserializeObject<JokeModel>(jokeString));
+                });
+                return jokeList;
+            }
+            else
+            {
+                jokeModel = JsonConvert.DeserializeObject<JokeModel>(jokeHttpService.GetRandomJokes(queryParameters).Result);
+                return new() { jokeModel };
+            }
         }
 
         public static JokeSubject GetNames()

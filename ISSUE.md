@@ -9,7 +9,7 @@ When running app for first time, I came across following issues:
 
 SN | Description | Issue | Status
 ---| ----------- | ------| ------
-1  | The multiple jokes are not shown when the user provides the count (No use of the number of times "n" variables) | BUG | TODO
+1  | The multiple jokes are not shown when the user provides the count (No use of the number of times "n" variables) | BUG | DONE
 2  | The user should be able to provide the joke count between 1-9 (No check for any invalid and out of range inputs) | BUG | DONE
 3  | From main menu, when user provides invalid input, "Invalid Input" message should be shown, and return to main menu | ISSUE | DONE
 4  | On random jokes option, when user chooses not to use random name, the category input is not taken | BUG | DONE
@@ -17,7 +17,6 @@ SN | Description | Issue | Status
 6  | No dev logging is available for correct app debugging | IMPROVE | DONE 
 7  | There is a in-consistency in the way user inputs are asked (sometime you need to press return sometimes not) | ISSUE | DONE
 8  | The categories result can possibly cached instead of requesting the API each time | IMPROVE | DONE
-9  | Show the on-progress message to user during the API call  | IMPROVE | TODO
 10 | Add instruction to terminate the application (Provide new option 'x' to exit in main menu) | IMPROVE | DONE
 11 | Refactoring of the code (Currently, everything is defined within the driver class ) | ISSUE | DONE
 12 | If a user provides invalid input, they should be prompted to correct their input. Or, use default value | BUG | DONE
@@ -26,6 +25,8 @@ SN | Description | Issue | Status
 15 | Fix the use of dynamic with the proper domain objects | IMPROVE | DONE
 16 | The category can be pre-fetched and stored, and before making request we can verify validity | IMPROVE | DONE
 17 | Refactor the HttpClient class with proper arguments | IMPROVE | DONE
+9  | Show the on-progress message to user during the API call  | IMPROVE | TODO
+18 | Show n random names for n various jokes | IMPROVE | TODO 
 
 ## Design Improvements
 

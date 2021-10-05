@@ -5,7 +5,7 @@ using Geotab.Core;
 
 namespace Geotab.Service
 {
-    class NameApiService : BaseApiService
+    internal class NameApiService : BaseApiService
     {
         public HttpClient httpClient { get; set; }
         public NameApiService() : this(new HttpClient()) { }
@@ -32,6 +32,11 @@ namespace Geotab.Service
             catch (HttpRequestException httpException)
             {
                 Logger.LogError("The http response failed due to network/server issue.", httpException);
+                throw;
+            }
+            catch (Exception exception) when (exception is OperationCanceledException || exception is TaskCanceledException)
+            {
+                Logger.LogError("The http request timed out", exception);
                 throw;
             }
         }
