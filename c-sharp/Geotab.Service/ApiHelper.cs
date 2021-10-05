@@ -56,7 +56,7 @@ namespace Geotab.Service
                 BaseUrl = GeotabApiConstants.NAME_SERVER_URL,
                 TimeoutInSeconds = GeotabApiConstants.TIMEOUT_SECONDS
             };
-            var result = JsonConvert.DeserializeObject<JokeSubject>(nameHttpService.Getnames().Result);
+            var result = JsonConvert.DeserializeObject<JokeSubject>(nameHttpService.GetNames().Result);
             return result;
         }
 

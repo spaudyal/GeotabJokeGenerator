@@ -5,7 +5,7 @@ using Geotab.Core;
 
 namespace Geotab.Service
 {
-    internal class NameApiService : BaseApiService
+    public class NameApiService : BaseApiService
     {
         public HttpClient httpClient { get; set; }
         public NameApiService() : this(new HttpClient()) { }
@@ -14,17 +14,21 @@ namespace Geotab.Service
             this.httpClient = httpClient;
         }
 
-        public async Task<string> Getnames()
+        public async Task<string> GetNames()
         {
             try
             {
                 if (httpClient.BaseAddress == null) // not initialized yet
                 {
-                    httpClient.BaseAddress = new Uri(GeotabApiConstants.NAME_SERVER_URL.TrimEnd('/'));
-                    httpClient.Timeout = TimeSpan.FromSeconds(GeotabApiConstants.TIMEOUT_SECONDS);
+                    httpClient.BaseAddress = new Uri(this.BaseUrl);
+                    httpClient.Timeout = TimeSpan.FromSeconds(this.TimeoutInSeconds);
                 }
                 var requestUri = new Uri($"{BaseUrl}");
                 Logger.Debug($"Making API Call to {requestUri}");
+
+                // TODO: Implement correct logic for handling task progress
+                Console.WriteLine($"Calling API {requestUri}. Please wait...");
+
                 var response = await httpClient.GetAsync(requestUri);
                 response.EnsureSuccessStatusCode();
                 return await response.Content.ReadAsStringAsync();

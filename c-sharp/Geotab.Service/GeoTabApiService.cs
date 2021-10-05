@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Geotab.Core;
-using Geotab.Model;
 
 namespace Geotab.Service
 {
-    internal class GeoTabApiService : BaseApiService
+    public class GeoTabApiService : BaseApiService
     {
         public HttpClient httpClient { get; set; }
         public GeoTabApiService() : this(new HttpClient()) { }
@@ -22,11 +21,15 @@ namespace Geotab.Service
             {
                 if (httpClient.BaseAddress == null) // not initialized yet
                 {
-                    httpClient.BaseAddress = new Uri(GeotabApiConstants.GEOTAB_API_URL);
-                    httpClient.Timeout = TimeSpan.FromSeconds(GeotabApiConstants.TIMEOUT_SECONDS);
+                    httpClient.BaseAddress = new Uri(this.BaseUrl);
+                    httpClient.Timeout = TimeSpan.FromSeconds(this.TimeoutInSeconds);
                 }
                 var requestUri = new Uri($"{BaseUrl}{GeotabApiConstants.JOKE_ENDPOINT}?{queryParameters}");
                 Logger.Debug($"Making API Call to {requestUri}");
+
+                // TODO: Implement correct logic for handling task progress
+                Console.WriteLine($"Calling API {requestUri}. Please wait...");
+
                 var response = await httpClient.GetAsync(requestUri);
                 response.EnsureSuccessStatusCode();
                 return await response.Content.ReadAsStringAsync();
@@ -50,8 +53,9 @@ namespace Geotab.Service
                     var task = GetRandomJokes(queryParameters);
                     taskList.Add(task);
                 }
+
                 // Await the completion of all the running tasks. 
-                var responses = await Task.WhenAll(taskList); // returns IEnumerable<string>>
+                var responses = await Task.WhenAll(taskList);
                 return await Task.FromResult<List<string>>(new(responses));
             }
             catch (HttpRequestException httpException)
@@ -72,11 +76,15 @@ namespace Geotab.Service
             {
                 if (httpClient.BaseAddress == null) // not initialized yet
                 {
-                    httpClient.BaseAddress = new Uri(GeotabApiConstants.GEOTAB_API_URL);
-                    httpClient.Timeout = TimeSpan.FromSeconds(GeotabApiConstants.TIMEOUT_SECONDS);
+                    httpClient.BaseAddress = new Uri(this.BaseUrl);
+                    httpClient.Timeout = TimeSpan.FromSeconds(this.TimeoutInSeconds);
                 }
                 var requestUri = new Uri($"{BaseUrl}{GeotabApiConstants.JOKE_CATEGORY_ENDPOINT}");
                 Logger.Debug($"Making API Call to {requestUri}");
+
+                // TODO: Implement correct logic for handling task progress
+                Console.WriteLine($"Calling API {requestUri}. Please wait...");
+
                 var response = await httpClient.GetAsync(requestUri);
                 response.EnsureSuccessStatusCode();
                 return await response.Content.ReadAsStringAsync();
