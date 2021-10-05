@@ -1,6 +1,7 @@
 # JokeGenerator Application
 
-This document lists the observed issues, and my applied improvements
+This document lists the observed issues, and my applied improvements  
+https://github.com/CodeWithSubash/JokeGenerator/blob/master/ISSUE.md
 
 ## Stories
 
@@ -18,8 +19,11 @@ SN | Description | Issue | Status
 8  | The categories result can possibly cached instead of requesting the API each time | IMPROVE | TODO
 9  | Show the on-progress message to user during the API call  | IMPROVE | TODO
 10 | Add instruction to terminate the application (Provide new option 'x' to exit in main menu) | IMPROVE | DONE
-11 | Refactoring of the code (Currently, everything is defined within the driver class ) | ISSUE | DONE-WIP
+11 | Refactoring of the code (Currently, everything is defined within the driver class ) | ISSUE | WIP
 12 | If a user provides invalid input, they should be prompted to correct their input. Or, use default value | BUG | DONE
+13 | When user provide the invalid category, no proper message is displayed and program terminates illegally | BUG | TODO
+14 | Handle the http response codes, and log the errors (500, 404) properly | BUG | TODO
+15 | Fix the use of dynamic with the proper domain objects | IMPROVE | DONE
 
 ## Design Improvements
 

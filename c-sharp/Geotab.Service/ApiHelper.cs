@@ -1,28 +1,31 @@
 ﻿using System;
+using System.Collections.Generic;
 using Geotab.Model;
-
+using Newtonsoft.Json;
 
 namespace Geotab.Service
 {
     public class ApiHelper
     {
-        public static string[] GetCategories()
+        public static List<string> GetCategories()
         {
             new JsonFeed("https://us-central1-geotab-interviews.cloudfunctions.net/joke_category", 0);
-            return JsonFeed.GetCategories();
+            var results = JsonConvert.DeserializeObject<List<string>>(JsonFeed.GetCategories().Result);
+            return results;
         }
 
-        public static string[] GetRandomJokes(JokeCategory category, JokeSubject subject, int number)
+        public static List<JokeModel> GetRandomJokes(JokeCategory category, JokeSubject subject, int number)
         {
             new JsonFeed("https://us-central1-geotab-interviews.cloudfunctions.net/joke", number);
-            return JsonFeed.GetRandomJokes(subject, category);
+            var results = JsonConvert.DeserializeObject<JokeModel>(JsonFeed.GetRandomJokes(subject, category).Result);
+            return new List<JokeModel>() { results };
         }
 
-        public static Tuple<string, string> GetNames()
+        public static JokeSubject GetNames()
         {
             new JsonFeed("https://www.names.privserv.com/api/", 0);
-            dynamic result = JsonFeed.Getnames();
-            return Tuple.Create(result.name.ToString(), result.surname.ToString());
+            var result = JsonConvert.DeserializeObject<JokeSubject>(JsonFeed.Getnames().Result);
+            return result;
         }
     }
 }

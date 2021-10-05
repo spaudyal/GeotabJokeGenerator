@@ -36,7 +36,6 @@ namespace JokeGenerator
             }
             catch (Exception exception)
             {
-
                 Logger.LogError("Application Error", exception);
             }
 

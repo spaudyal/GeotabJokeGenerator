@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Geotab.Core;
@@ -17,7 +18,7 @@ namespace Geotab.Service
             _url = endpoint;
         }
 
-        public static string[] GetRandomJokes(JokeSubject subject, JokeCategory category)
+        public static async Task<string> GetRandomJokes(JokeSubject subject, JokeCategory category)
         {
             HttpClient client = new HttpClient();
             client.BaseAddress = new Uri(_url);
@@ -28,19 +29,9 @@ namespace Geotab.Service
                 url += "category=";
                 url += category.Name;
             }
-
+            // TODO
             Logger.Debug($"Making API Call to {url}");
-            string joke = Task.FromResult(client.GetStringAsync(url).Result).Result;
-
-            if (subject != null)
-            {
-                int index = joke.IndexOf(GeoConstants.JOKE_SUBJECT_DEFAULT);
-                string firstPart = joke.Substring(0, index);
-                string secondPart = joke.Substring(0 + index + GeoConstants.JOKE_SUBJECT_DEFAULT.Length, joke.Length - (index + GeoConstants.JOKE_SUBJECT_DEFAULT.Length));
-                joke = firstPart + " " + subject.FirstName + " " + subject.LastName + secondPart;
-            }
-
-            return new string[] { JsonConvert.DeserializeObject<dynamic>(joke).value };
+            return await Task.FromResult(client.GetStringAsync(url).Result);
         }
 
         /// <summary>
@@ -48,21 +39,20 @@ namespace Geotab.Service
         /// </summary>
         /// <param name="client2"></param>
         /// <returns></returns>
-		public static dynamic Getnames()
+		public static async Task<string> Getnames()
         {
             HttpClient client = new HttpClient();
             client.BaseAddress = new Uri(_url);
             Logger.Debug($"Making API Call to {_url}");
-            var result = client.GetStringAsync("").Result;
-            //TODO use the Subject DTO here
-            return JsonConvert.DeserializeObject<dynamic>(result);
+            return await Task.FromResult(client.GetStringAsync("").Result);
+            
         }
 
-        public static string[] GetCategories()
+        public static async Task<string> GetCategories()
         {
             HttpClient client = new HttpClient();
             Logger.Debug($"Making API Call to {_url}");
-            return new string[] { Task.FromResult(client.GetStringAsync(new Uri(_url)).Result).Result };
+            return await Task.FromResult(client.GetStringAsync(new Uri(_url)).Result);
         }
 
         //public static string ConstructUri()

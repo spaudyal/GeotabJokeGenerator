@@ -8,29 +8,33 @@ namespace JokeGenerator
     {
         public static void Start()
         {
-            bool isInvalidInput;
+            bool isExitToMainMenu;
             do
             {
                 DisplayControl.ShowMainMenu();
-                isInvalidInput = false;
+                isExitToMainMenu = false;
                 var userMenuChoice = ConsoleReader.ReadKey();
                 switch (userMenuChoice.Key)
                 {
                     case GeoMenuOption.CATEGORY:
-                        DisplayControl.PrintResults(ApiHelper.GetCategories());
+                        DisplayControl.PrintCategories(ApiHelper.GetCategories());
                         break;
                     case GeoMenuOption.RANDOM_JOKE:
                         JokeSubject jokeSubject = GetJokeSubject();
                         JokeCategory jokeCategory = GetJokeCategory();
                         int jokeCount = GetJokeCount();
-                        DisplayControl.PrintResults(ApiHelper.GetRandomJokes(jokeCategory, jokeSubject, jokeCount));
+                        DisplayControl.PrintJokes(ApiHelper.GetRandomJokes(jokeCategory, jokeSubject, jokeCount));
+                        break;
+                    case GeoMenuOption.EXIT_MENU:
+                        isExitToMainMenu = true;
+                        DisplayControl.ShowLeavingMessage();
                         break;
                     default:
-                        isInvalidInput = true;
+                        isExitToMainMenu = true;
                         DisplayControl.ShowInvalidMessage(userMenuChoice);
                         break;
                 }
-            } while (isInvalidInput);
+            } while (!isExitToMainMenu);
         }
 
         private static int GetJokeCount()
@@ -79,9 +83,7 @@ namespace JokeGenerator
             var userOption = ConsoleReader.ReadKey();
             if (UserOptionHelper.IsAgreed(userOption))
             {
-                var tupleName = ApiHelper.GetNames();
-                subject.FirstName = tupleName.Item1;
-                subject.LastName = tupleName.Item2;
+                subject = ApiHelper.GetNames();
             }
             else
             {

@@ -19,5 +19,9 @@ namespace Geotab.Core
     {
         public const ConsoleKey CATEGORY = ConsoleKey.C;
         public const ConsoleKey RANDOM_JOKE = ConsoleKey.R;
+        public const ConsoleKey EXIT_MENU = ConsoleKey.X;
+        public const ConsoleKey EXIT_APPLICATION = ConsoleKey.Escape;
+        public const ConsoleKey USER_OPTION_YES = ConsoleKey.Y;
+        public const ConsoleKey USER_OPTION_NO = ConsoleKey.N;
     }
 }
