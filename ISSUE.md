@@ -5,7 +5,7 @@ https://github.com/CodeWithSubash/JokeGenerator/blob/master/ISSUE.md
 
 ## Stories
 
-When running app for first time, I came across following issues:
+When running app for first time, I came across following issues, and my address on the issues:
 
 SN | Description | Issue | Status
 ---| ----------- | ------| ------
@@ -25,25 +25,49 @@ SN | Description | Issue | Status
 15 | Fix the use of dynamic with the proper domain objects | IMPROVE | DONE
 16 | The category can be pre-fetched and stored, and before making request we can verify validity | IMPROVE | DONE
 17 | Refactor the HttpClient class with proper arguments | IMPROVE | DONE
+19 | Add the unit tests for the business layer (service, domain) | IMPROVE | DONE
+20 | Add the unit tests for the Application layer | IMPROVE | TODO
 9  | Show the on-progress message to user during the API call  | IMPROVE | TODO
 18 | Show n random names for n various jokes | IMPROVE | TODO 
 
 ## Design Improvements
 
 The improvements made, with my considerations
-- Using a Log4net, one of the top logging frameworks
+1. Using a Log4net, one of the top logging frameworks
 - Use a static logger wrapper, so we don't need to construct the Logger from each project. Also, easily extendible if want to replace by other framework in future
-- Reformat the code to various classes/files giving single responsibility
--- Console Reader (responsible for reading inputs)
--- Console Writer (Responsible for writign outputs)
--- DisplayControl (Responsible for all display messages)
--- Application (Main Application logic resides here)
--- Program/Main (Application Driver method only)
 
-- Reformat the code into different libraries
--- Service Layer (will handle all the API functionality)
--- Core Layer (all global level functionality resides in Core project)
--- Model Layer (all the DTO and types for the solution resides)
+2. Reformat the code to various classes/files giving single responsibility
+- Console Reader (responsible for reading inputs)
+- Console Writer (Responsible for writing outputs)
+- DisplayControl (Responsible for all display messages)
+- Application (Main Application logic resides here)
+- Program/Main (Application Driver method only)
 
+3. Create various dll libraries based on functionality
+- Service Layer (will handle all the API functionality)
+- Core Layer (all global level functionality resides in Core project)
+- Model Layer (all the DTO and types for the solution resides)
+- Application Layer (all user input and driver code resides)
+
+4. Handle the HttpRequest and response correctly
+- Create a separate api services for the geotab api v/s nameserver api
 - Proper handling of error from the HttpResponse object
-- 
+
+5. Using the typed DTO for deserializing
+- Remove the dynamic object mapping
+- Create proper DTO (domain models) and deserialize the httpresponsemessage properly
+
+6. Add the missing functionality
+- Enhance the user input and menu options
+- User can request for multiple jokes
+- Provide interactive menu for providing re-enter option for invalid user inputs
+- Add other missing minor features (as listed in the bugs above)
+
+7. Adding Unit Tests
+- Add the unit test for the domain object
+- Add the unit tests for the service/api layer
+- Add the unit tests for the application code (TODO)
+
+8. Improvements left TODO
+- Add the in-progress feature for API request
+- For multiple joke request, use multiple random names, if requested (currently app uses single random name in all jokes requested at once)
