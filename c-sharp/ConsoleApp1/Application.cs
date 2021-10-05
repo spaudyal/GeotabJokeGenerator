@@ -7,7 +7,7 @@ using Geotab.Service;
 
 namespace JokeGenerator
 {
-    public class Application : IDisposable
+    internal class Application : IDisposable
     {
         // TODO: We might need a background loader, or cleanup thes cache in certain interval to keep our cache updated
         private static HashSet<string> m_cachedCategory;
@@ -21,26 +21,60 @@ namespace JokeGenerator
                 var userMenuChoice = ConsoleReader.ReadKey();
                 switch (userMenuChoice.Key)
                 {
-                    case GeoMenuOption.CATEGORY:
-                        List<string> categories = ReadOrGetCategories();
-                        DisplayControl.PrintCategories(categories);
+                    case GeotabMenuOptions.VIEW_CATEGORY:
+                        DisplayControl.PrintCategories(ReadOrGetCategories());
                         break;
-                    case GeoMenuOption.RANDOM_JOKE:
-                        JokeSubject jokeSubject = GetJokeSubject();
-                        JokeCategory jokeCategory = GetJokeCategory();
-                        int jokeCount = GetJokeCount();
-                        DisplayControl.PrintJokes(ApiHelper.GetRandomJokes(jokeCategory, jokeSubject, jokeCount));
+                    case GeotabMenuOptions.VIEW_RANDOM_JOKE:
+                        var userRequestForRandomName = TryGetJokeSubject(out JokeSubject randomName);
+                        var jokeList = ApiHelper.GetRandomJokes(GetJokeCategory(), GetJokeCount());
+                        if (userRequestForRandomName)
+                        {
+                            UpdateSubjectForJokes(jokeList, randomName);
+                        }
+                        DisplayControl.PrintJokes(jokeList);
                         break;
-                    case GeoMenuOption.EXIT_MENU:
+                    case GeotabMenuOptions.EXIT_MENU:
                         isExitToMainMenu = true;
                         DisplayControl.ShowLeavingMessage();
                         break;
                     default:
-                        isExitToMainMenu = true;
                         DisplayControl.ShowInvalidMessage(userMenuChoice);
                         break;
                 }
             } while (!isExitToMainMenu);
+        }
+
+        public void Dispose()
+        {
+            m_cachedCategory.Clear();
+        }
+
+        #region Private Helper Methods
+
+        private static void UpdateSubjectForJokes(List<JokeModel> jokeList, JokeSubject randomName)
+        {
+            jokeList.ForEach(joke =>
+            {
+                joke.UpdateSubjectNameBy(randomName.ToString());
+            });
+        }
+
+        private static bool TryGetJokeSubject(out JokeSubject jokeSubject)
+        {
+            jokeSubject = null;
+            ConsolePrinter.PrintLine("Want to use a random name? y/n");
+            var userOption = ConsoleReader.ReadKey();
+            if (UserOptionHelper.IsAgreed(userOption))
+            {
+                jokeSubject = ApiHelper.GetNames();
+                return true;
+            }
+            if (!UserOptionHelper.IsDisagreed(userOption))
+            {
+                ConsolePrinter.Print($"Invalid Input [{userOption.Key}].");
+            }
+            ConsolePrinter.PrintLine($"Using default Subject [{GlobalConstants.JOKE_SUBJECT_DEFAULT}].");
+            return false;
         }
 
         private static List<string> ReadOrGetCategories()
@@ -66,9 +100,9 @@ namespace JokeGenerator
             }
             else
             {
-                ConsolePrinter.PrintLine($"Invalid input. Using default count {GeoConstants.JOKE_COUNT_DEFAULT}.");
-                Logger.LogWarning($"Invalid input. Using default count {GeoConstants.JOKE_COUNT_DEFAULT}.");
-                return GeoConstants.JOKE_COUNT_DEFAULT;
+                ConsolePrinter.PrintLine($"Invalid input. Using default count {GlobalConstants.JOKE_COUNT_DEFAULT}.");
+                Logger.LogWarning($"Invalid input. Using default count {GlobalConstants.JOKE_COUNT_DEFAULT}.");
+                return GlobalConstants.JOKE_COUNT_DEFAULT;
             }
         }
 
@@ -113,30 +147,6 @@ namespace JokeGenerator
             List<string> validCategories = ReadOrGetCategories();
             return validCategories.Contains(categoryName, StringComparer.OrdinalIgnoreCase);
         }
-
-        private static JokeSubject GetJokeSubject()
-        {
-            JokeSubject subject = new();
-            ConsolePrinter.PrintLine("Want to use a random name? y/n");
-            var userOption = ConsoleReader.ReadKey();
-            if (UserOptionHelper.IsAgreed(userOption))
-            {
-                subject = ApiHelper.GetNames();
-            }
-            else
-            {
-                if (!UserOptionHelper.IsDisagreed(userOption))
-                {
-                    ConsolePrinter.Print($"Invalid Input [{userOption.Key}].");
-                }
-                ConsolePrinter.PrintLine($"Using default Subject Name [{subject}].");
-            }
-            return subject;
-        }
-
-        public void Dispose()
-        {
-            m_cachedCategory.Clear();
-        }
+        #endregion 
     }
 }

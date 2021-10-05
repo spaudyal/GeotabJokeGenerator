@@ -14,5 +14,10 @@ namespace Geotab.Model
         {
             return $"Joke: {Value}";
         }
+
+        public void UpdateSubjectNameBy(string newName)
+        {
+            this.Value = this.Value.Replace("Chuck Norris", newName);
+        }
     }
 }

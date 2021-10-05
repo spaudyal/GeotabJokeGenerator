@@ -2,7 +2,7 @@
 
 namespace JokeGenerator
 {
-    public class ConsolePrinter
+    internal class ConsolePrinter
     {
         public static void PrintLine(string value)
         {

@@ -25,7 +25,7 @@ SN | Description | Issue | Status
 14 | Handle errors during http request/async calls, and throw them gracefully | BUG | DONE
 15 | Fix the use of dynamic with the proper domain objects | IMPROVE | DONE
 16 | The category can be pre-fetched and stored, and before making request we can verify validity | IMPROVE | DONE
-17 | Refactor the HttpClient class with proper arguments | IMPROVE | TODO
+17 | Refactor the HttpClient class with proper arguments | IMPROVE | DONE
 
 ## Design Improvements
 

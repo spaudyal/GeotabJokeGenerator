@@ -2,7 +2,7 @@
 
 namespace JokeGenerator
 {
-    class ConsoleReader
+    internal class ConsoleReader
     {
         public static ConsoleKeyInfo ReadKey()
         {

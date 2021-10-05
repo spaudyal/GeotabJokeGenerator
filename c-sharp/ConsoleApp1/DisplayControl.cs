@@ -5,7 +5,7 @@ using Geotab.Model;
 
 namespace JokeGenerator
 {
-    class DisplayControl
+    internal class DisplayControl
     {
         public static void ShowInvalidMessage(ConsoleKeyInfo keyInfo)
         {

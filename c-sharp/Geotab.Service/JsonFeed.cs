@@ -6,7 +6,7 @@ using Geotab.Model;
 
 namespace Geotab.Service
 {
-    // TODO Improve the HttpClient request class
+    [Obsolete("Deprecated. Instead use the GeoTabApiService, NameApiService classes", true)]
     class JsonFeed
     {
         static string _url = "";
@@ -30,7 +30,6 @@ namespace Geotab.Service
                     url += "category=";
                     url += category.Name;
                 }
-                // TODO
                 Logger.Debug($"Making API Call to {url}");
                 var response = await client.GetAsync(url);
                 response.EnsureSuccessStatusCode();
@@ -53,6 +52,7 @@ namespace Geotab.Service
             try
             {
                 HttpClient client = new();
+                client.Timeout = TimeSpan.FromSeconds(GeotabApiConstants.TIMEOUT_SECONDS);
                 client.BaseAddress = new(_url);
                 Logger.Debug($"Making API Call to {_url}");
                 var response = await client.GetAsync("");
@@ -82,19 +82,5 @@ namespace Geotab.Service
                 throw;
             }
         }
-
-        //public static string ConstructUri()
-        //{
-        //    UriBuilder uriBuilder = new UriBuilder();
-
-        //    string url = string.Empty;
-        //    if (category != null)
-        //    {
-        //        url += "?";
-        //        url += "category=";
-        //        url += category.Name;
-        //    }
-
-        //}
     }
 }

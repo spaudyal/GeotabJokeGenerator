@@ -40,6 +40,7 @@ namespace JokeGenerator
             return char.IsNumber(keyInfo.KeyChar);
         }
 
+        #region Private Helper Methods
         private static char? GetEnteredKey(ConsoleKeyInfo consoleKeyInfo)
         {
             char? key = null;
@@ -84,5 +85,6 @@ namespace JokeGenerator
             }
             return key;
         }
+        #endregion
     }
 }

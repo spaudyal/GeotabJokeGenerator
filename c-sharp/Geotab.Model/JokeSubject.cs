@@ -18,7 +18,7 @@ namespace Geotab.Model
 
         public override string ToString()
         {
-            return $"FirstName: {FirstName}, LastName: {LastName}";
+            return $"{FirstName} {LastName}";
         }
     }
 }
